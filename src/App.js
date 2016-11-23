@@ -2,18 +2,18 @@ import bunyan from 'bunyan';
 import express from 'express';
 import mongoose from 'mongoose';
 import getMiddlewares from './middlewares';
-import getModels from './modelsr';
+import getModels from './models';
 import getResourses from './resourses';
 import getApi from './api';
 
-class App {
+export default class App {
   constructor(params = {}) {
     Object.assign(this, params);
     if(!this.log) this.log = this.getLogger();
     this.init();
   }
 
-  getLogger() {
+  getLogger(params) {
     return bunyan.createLogger(Object.assign({
         name: 'app',
         src: __DEV__,
@@ -36,7 +36,7 @@ class App {
   getDatabase() {
     return {
       run: () => {
-        new Promise((resolve) {
+        new Promise((resolve) => {
           mongoose.connect(this.config.db.url);
           resolve();
         });
@@ -48,24 +48,24 @@ class App {
     this.log.trace('App init');
 
     this.app = express();
-    this.db = getDatabase;
-    this.middlewares = getMiddlewares();
-    this.log.trace('middlewares', Object.key(this.middlewares));
-    this.models = getModels();
-    this.log.trace('models', Object.key(this.models));
-    this.resourse = getResourses();
-    this.log.trace('resourse', Object.key(this.resourse));
+    this.db = this.getDatabase();
+    this.middlewares = this.getMiddlewares();
+    this.log.trace('middlewares', Object.keys(this.middlewares));
+    this.models = this.getModels();
+    this.log.trace('models', Object.keys(this.models));
+    this.resourses = this.getResourses();
+    this.log.trace('resourses', Object.keys(this.resourses));
 
     this.useMiddlewares();
     this.useRoutes();
   }
 
   useMiddlewares() {
-    this.app.use(middlewares.reqLog);
-    this.app.use(middlewares.accessLogger);
-    this.app.use(middlewares.reqParser);
-    this.app.use(resourse.Auth.parseToken);
-    this.app.use(resourse.Auth.parseUser);
+    this.app.use(this.middlewares.reqLog);
+    this.app.use(this.middlewares.accessLogger);
+    this.app.use(this.middlewares.reqParser);
+    this.app.use(this.resourses.Auth.parseToken);
+    this.app.use(this.resourses.Auth.parseUser);
   }
   useRoutes() {
     const api = getApi(this)

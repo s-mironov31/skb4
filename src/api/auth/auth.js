@@ -10,6 +10,6 @@ export default (ctx) => {
   api.all('/validate', ctx.resourses.Auth.validate);
   api.post('/signup', ctx.resourses.Auth.signup);
   api.post('/login', ctx.resourses.Auth.login);
-  
+
   return api;
 }
