@@ -88,7 +88,7 @@ export default class App {
 
     return new Promise((resolve) => {
       this.app.listen(this.config.port, () => {
-        console.log(`App ${this.config.name} running on port ${this.config.port}!`);
+        this.log.info(`App "${this.config.name}" running on port ${this.config.port}!`);
         resolve(this);
       });
     })
