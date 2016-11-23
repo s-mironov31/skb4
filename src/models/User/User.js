@@ -5,7 +5,7 @@ import Promise from 'bluebird'
 const bcryptGenSalt = Promise.promisify(bcrypt.genSalt)
 const bcryptHash = Promise.promisify(bcrypt.hash)
 const bcryptCompare = Promise.promisify(bcrypt.compare)
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 export default (ctx) => {
   // if (!ctx.log) throw '!log'

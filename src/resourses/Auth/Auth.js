@@ -1,10 +1,11 @@
-import jwt from 'express-jwt'
+import jwt from 'express-jwt';
 
 export function canonize(str) {
   return str.toLowerCase().trim()
 }
 
 export default (ctx) => {
+
   const User = ctx.models.User
   const resourse = {};
 
@@ -33,8 +34,9 @@ export default (ctx) => {
   }
   resourse.signup = async function (req, res) {
     try {
-      const userFields = resourse.getUserFields(req, res)
-      const criteria = resourse.getUserCriteria(req, res)
+      const userFields = resourse.getUserFields(req, res);
+      const criteria = resourse.getUserCriteria(req, res);
+      console.log(criteria);
       const existUser = await User.findOne(criteria)
       if (existUser) return res.status(400).send('Username with this email or username is registered')
       const user = new User(userFields)
